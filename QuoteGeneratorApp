@@ -1,0 +1,42 @@
+import requests
+import tkinter as tk
+
+class QuoteGenerator(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.pack()
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.quote_label = tk.Label(self)
+        self.quote_label.pack(side="top")
+
+        self.author_label = tk.Label(self)
+        self.author_label.pack(side="top")
+
+        self.generate_button = tk.Button(self, 
+        text="Generate Quote", 
+        command=self.generate_quote)
+        self.generate_button.pack(side="bottom")
+
+    def generate_quote(self):
+        # Send a request to the Quotes 
+        # API to get a random quote
+        url = 'https://api.quotable.io/random'
+        response = requests.get(url)
+        data = response.json()
+
+        # Extract the quote and author 
+        # from the response
+        quote = data['content']
+        author = data['author']
+
+        # Display the quote and author in the GUI
+        self.quote_label.configure(text=quote)
+        self.author_label.configure(text="- " + author)
+
+# Create the Tkinter application and run it
+root = tk.Tk()
+app = QuoteGenerator(master=root)
+app.mainloop()
